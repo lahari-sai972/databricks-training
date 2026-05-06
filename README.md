@@ -28,5 +28,5 @@
 - Practice JOIN and Nested queries
 
 ## Progress
-- Completed queries 1–35
+- Completed queries 1–30
 - Remaining queries will be completed next
