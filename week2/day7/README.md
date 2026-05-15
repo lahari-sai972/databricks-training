@@ -1,5 +1,8 @@
 
-Topics Covered
+##Topics Covered
+
+
+
 SELECT Statement
 WHERE Clause
 JOIN Operations
