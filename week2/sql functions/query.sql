@@ -1,191 +1,457 @@
--- QUESTION 1
+-- LEVEL 1 : QUESTION 1
 
-SELECT 
+SELECT
+LOWER(emp_name) AS employee_name,
+ROUND(salary - (salary * tax_percent/100)) AS net_salary,
+YEAR(last_revision) AS revision_year,
+TIMESTAMPDIFF(MONTH,last_revision,CURDATE()) AS months_since_revision,
+
+CASE
+WHEN tax_percent > 20 
+AND TIMESTAMPDIFF(MONTH,last_revision,CURDATE()) > 24
+THEN 'Flag Tax Shock'
+
+WHEN tax_percent BETWEEN 15 AND 20
+THEN 'Flag Review Needed'
+
+ELSE 'Stable'
+END AS status
+
+FROM salary_audit;
+
+
+
+-- LEVEL 1 : QUESTION 2
+
+SELECT
 INITCAP(emp_name) AS employee_name,
-UPPER(emp_name) AS upper_name,
-LOWER(emp_name) AS lower_name,
-ROUND(base_salary + COALESCE(bonus,0)) AS total_income,
-YEAR(joining_date) AS joining_year,
+ROUND((bonus/base_salary)*100) AS bonus_percentage,
+DAYNAME(bonus_date) AS bonus_day,
+ABS(base_salary - bonus) AS salary_bonus_difference,
 
 CASE
-WHEN TIMESTAMPDIFF(YEAR, joining_date, CURDATE()) > 7 THEN 'Senior'
-WHEN TIMESTAMPDIFF(YEAR, joining_date, CURDATE()) BETWEEN 4 AND 7 THEN 'Mid'
-ELSE 'Junior'
-END AS experience_level
+WHEN ((bonus/base_salary)*100) > 30
+AND DAYNAME(bonus_date) IN ('Saturday','Sunday')
+THEN 'Suspicious'
 
-FROM employee_payments;
+WHEN ((bonus/base_salary)*100) <= 20
+THEN 'Normal'
+
+ELSE 'Audit'
+END AS status
+
+FROM bonus_monitor;
 
 
 
--- QUESTION 2
+-- LEVEL 1 : QUESTION 3
 
 SELECT
-UPPER(customer_name) AS customer_name,
-DATEDIFF(COALESCE(delivery_date,CURDATE()), order_date) AS delivery_days,
-TRUNCATE(order_amount,1) AS order_amount,
+UPPER(emp_name) AS employee_name,
+TIMESTAMPDIFF(YEAR,joining_date,CURDATE()) AS actual_experience,
+
+ABS(
+declared_experience - 
+TIMESTAMPDIFF(YEAR,joining_date,CURDATE())
+) AS experience_difference,
+
+FLOOR(salary) AS floor_salary,
 
 CASE
-WHEN delivery_date IS NULL THEN 'Pending'
-WHEN DATEDIFF(delivery_date,order_date)=0 THEN 'Same-day'
-WHEN DATEDIFF(delivery_date,order_date)>3 THEN 'Delayed'
-ELSE 'Normal'
-END AS delivery_status
+WHEN declared_experience > 
+TIMESTAMPDIFF(YEAR,joining_date,CURDATE())
+THEN 'Overstated'
 
-FROM orders_delivery;
+WHEN declared_experience < 
+TIMESTAMPDIFF(YEAR,joining_date,CURDATE())
+THEN 'Understated'
+
+ELSE 'Matched'
+END AS status
+
+FROM employee_experience;
 
 
 
--- QUESTION 3
+-- LEVEL 1 : QUESTION 4
 
 SELECT
-INITCAP(cust_name) AS customer_name,
-MONTHNAME(purchase_date) AS purchase_month,
-ROUND(purchase_amount) AS rounded_amount,
-ABS(purchase_amount) AS absolute_amount,
+RIGHT(emp_name,2) AS last_two_characters,
+DAY(credit_date) AS day_of_month,
+TRUNCATE(salary,0) AS truncated_salary,
+MOD(TRUNCATE(salary,0),10) AS salary_mod,
 
 CASE
-WHEN purchase_amount > 15000 THEN 'High Spender'
-WHEN purchase_amount BETWEEN 8000 AND 15000 THEN 'Medium'
+WHEN MOD(TRUNCATE(salary,0),10) = DAY(credit_date)
+THEN 'Pattern Match'
+
+ELSE 'No Match'
+END AS status
+
+FROM salary_digits;
+
+
+
+-- LEVEL 1 : QUESTION 5
+
+SELECT
+LOWER(emp_name) AS employee_name,
+DAYNAME(payment_date) AS weekday,
+ROUND(salary) AS rounded_salary,
+MOD(ROUND(salary),2) AS salary_mod,
+
+CASE
+WHEN MOD(ROUND(salary),2)=0
+AND DAYOFMONTH(payment_date)%2<>0
+THEN 'Violation'
+
+ELSE 'Compliant'
+END AS status
+
+FROM payroll_control;
+
+
+
+-- LEVEL 1 : QUESTION 6
+
+SELECT
+INITCAP(emp_name) AS employee_name,
+TIMESTAMPDIFF(YEAR,last_hike,CURDATE()) AS years_since_hike,
+POWER(TIMESTAMPDIFF(YEAR,last_hike,CURDATE()),2) AS power_years,
+ROUND(salary * 1.1) AS salary_impact,
+
+CASE
+WHEN TIMESTAMPDIFF(YEAR,last_hike,CURDATE()) > 5
+THEN 'High Inflation Risk'
+
+WHEN TIMESTAMPDIFF(YEAR,last_hike,CURDATE()) BETWEEN 3 AND 5
+THEN 'Moderate'
+
 ELSE 'Low'
-END AS spending_type
+END AS status
 
-FROM customer_spending;
+FROM inflation_watch;
 
 
 
--- QUESTION 4
+-- LEVEL 1 : QUESTION 7
 
 SELECT
-SUBSTRING_INDEX(user_email,'@',-1) AS domain_name,
-TIMESTAMPDIFF(MONTH,start_date,end_date) AS duration_months,
-FORMAT(subscription_fee,2) AS formatted_fee,
-DATEDIFF(end_date,CURDATE()) AS remaining_days,
+UPPER(emp_name) AS employee_name,
+YEAR(record_date) AS record_year,
+SIGN(salary) AS salary_sign,
+ABS(salary) AS absolute_salary,
 
 CASE
-WHEN end_date > CURDATE() THEN 'Active'
-WHEN DATEDIFF(end_date,CURDATE()) BETWEEN 0 AND 30 THEN 'Expiring Soon'
-ELSE 'Expired'
-END AS subscription_status
+WHEN salary < 0 THEN 'Negative Error'
+WHEN salary = 0 THEN 'Zero Salary'
+ELSE 'Valid'
+END AS status
 
-FROM subscriptions;
+FROM salary_integrity;
 
 
 
--- QUESTION 5
+-- LEVEL 1 : QUESTION 8
 
 SELECT
-UPPER(customer_name) AS customer_name,
-POWER((1 + interest_rate/100),1) AS monthly_interest,
-TIMESTAMPDIFF(YEAR,loan_start,CURDATE()) AS years_since_loan,
-ROUND((loan_amount * interest_rate/100)/12) AS emi,
+LENGTH(emp_name) AS name_length,
+TIMESTAMPDIFF(YEAR,join_date,CURDATE()) AS years_of_service,
+ROUND(salary) AS rounded_salary,
 
 CASE
-WHEN interest_rate > 9 THEN 'High Risk'
-WHEN interest_rate BETWEEN 8 AND 9 THEN 'Medium Risk'
-ELSE 'Low Risk'
-END AS risk_category
+WHEN LENGTH(emp_name) > 
+TIMESTAMPDIFF(YEAR,join_date,CURDATE())
+THEN 'Name Bias'
 
-FROM loan_details;
+ELSE 'Neutral'
+END AS status
+
+FROM name_salary;
 
 
 
--- QUESTION 6
+-- LEVEL 1 : QUESTION 9
 
 SELECT
+MONTHNAME(paid_date) AS month_name,
+CEIL(salary) AS ceil_salary,
+LAST_DAY(paid_date) AS last_day_of_month,
+
+CASE
+WHEN paid_date = LAST_DAY(paid_date)
+THEN 'End Month Spike'
+
+ELSE 'Regular'
+END AS status
+
+FROM salary_monthly;
+
+
+
+-- LEVEL 1 : QUESTION 10
+
+SELECT
+LEFT(emp_name,1) AS first_character,
+TRUNCATE(salary,0) AS truncated_salary,
+DAY(audit_date) AS audit_day,
+
+CASE
+WHEN DAY(audit_date) > 5
+THEN 'Digit Alert'
+
+ELSE 'Normal'
+END AS status
+
+FROM digit_audit;
+
+
+
+-- LEVEL 1 : QUESTION 11
+
+SELECT
+LEFT(bank_code,4) AS bank_prefix,
+DAYNAME(credit_date) AS weekday_name,
+ROUND(salary) AS rounded_salary,
+MOD(ROUND(salary),5) AS salary_mod,
+
+CASE
+WHEN DAYNAME(credit_date) IN ('Saturday','Sunday')
+AND MOD(ROUND(salary),5)=0
+THEN 'Weekend Fraud'
+
+WHEN LEFT(bank_code,4)='HDFC'
+THEN 'Bank Review'
+
+ELSE 'Normal'
+END AS status
+
+FROM salary_credit_audit;
+
+
+
+-- LEVEL 1 : QUESTION 12
+
+SELECT
+HOUR(credit_ts) AS credit_hour,
 LOWER(emp_name) AS employee_name,
-ROUND((present_days/total_days)*100) AS attendance_percentage,
-MONTHNAME(record_date) AS month_name,
-(total_days-present_days) AS absent_days,
+FLOOR(salary) AS floor_salary,
+ABS(FLOOR(salary)-HOUR(credit_ts)) AS salary_hour_difference,
 
 CASE
-WHEN (present_days/total_days)*100 >= 90 THEN 'Excellent'
-WHEN (present_days/total_days)*100 BETWEEN 75 AND 89 THEN 'Average'
-ELSE 'Poor'
-END AS attendance_status
+WHEN HOUR(credit_ts) BETWEEN 0 AND 3
+THEN 'Midnight Drift'
 
-FROM attendance;
+WHEN HOUR(credit_ts) > 18
+THEN 'After Hours'
+
+ELSE 'Business Hours'
+END AS status
+
+FROM salary_time_drift;
 
 
 
--- QUESTION 7
+-- LEVEL 1 : QUESTION 13
 
 SELECT
-INITCAP(product_name) AS product_name,
-ABS(mrp-selling_price) AS discount_amount,
-ROUND(((mrp-selling_price)/mrp)*100,2) AS discount_percentage,
-DAYNAME(sale_date) AS sale_day,
+TRUNCATE(salary,2) AS truncated_salary,
+
+ABS(
+ROUND(salary,2)-TRUNCATE(salary,2)
+) AS precision_difference,
+
+DAYNAME(record_date) AS day_name,
+LENGTH(emp_name) AS name_length,
 
 CASE
-WHEN selling_price < mrp THEN 'Valid Discount'
-WHEN selling_price > mrp THEN 'Overpriced'
-ELSE 'No Discount'
-END AS discount_status
+WHEN ABS(
+ROUND(salary,2)-TRUNCATE(salary,2)
+) > 0.01
+THEN 'Precision Loss'
 
-FROM product_sales;
+ELSE 'Safe'
+END AS status
 
-
-
--- QUESTION 8
-
-SELECT
-UPPER(holder_name) AS holder_name,
-TIMESTAMPDIFF(YEAR,policy_start,policy_end) AS policy_duration,
-DATEDIFF(policy_end,CURDATE()) AS remaining_days,
-ROUND(premium_amount) AS rounded_premium,
-
-CASE
-WHEN policy_end < CURDATE() THEN 'Expired'
-WHEN TIMESTAMPDIFF(YEAR,policy_start,policy_end) >= 3 THEN 'Long Term'
-ELSE 'Mid Term'
-END AS policy_status
-
-FROM insurance_policies;
+FROM salary_precision;
 
 
 
--- QUESTION 9
+-- LEVEL 1 : QUESTION 14
 
 SELECT
-LOWER(emp_name) AS employee_name,
 TIMESTAMPDIFF(YEAR,last_hike,CURDATE()) AS years_since_hike,
 
-CASE
-WHEN rating = 5 THEN current_salary * 1.20
-WHEN rating = 4 THEN current_salary * 1.10
-ELSE current_salary * 1.05
-END AS increment_amount,
+POWER(
+growth_rate,
+TIMESTAMPDIFF(YEAR,last_hike,CURDATE())
+) AS growth_power,
 
 ROUND(
-CASE
-WHEN rating = 5 THEN current_salary * 1.20
-WHEN rating = 4 THEN current_salary * 1.10
-ELSE current_salary * 1.05
-END
-) AS new_salary,
+base_salary * POWER(
+growth_rate,
+TIMESTAMPDIFF(YEAR,last_hike,CURDATE())
+)
+) AS projected_salary,
+
+UPPER(emp_name) AS employee_name,
 
 CASE
-WHEN rating = 5 THEN 'High Increment'
-WHEN rating = 4 THEN 'Moderate'
-ELSE 'No Increment'
-END AS increment_status
+WHEN ROUND(
+base_salary * POWER(
+growth_rate,
+TIMESTAMPDIFF(YEAR,last_hike,CURDATE())
+)
+) > 150000
+THEN 'Explosive Growth'
 
-FROM salary_revision;
+WHEN ROUND(
+base_salary * POWER(
+growth_rate,
+TIMESTAMPDIFF(YEAR,last_hike,CURDATE())
+)
+) BETWEEN 100000 AND 150000
+THEN 'Controlled'
+
+ELSE 'Stagnant'
+END AS status
+
+FROM salary_growth;
 
 
 
--- QUESTION 10
+-- LEVEL 1 : QUESTION 15
 
 SELECT
-customer_name,
-ABS(balance) AS absolute_balance,
-DATEDIFF(CURDATE(),last_transaction) AS days_since_transaction,
-INITCAP(branch) AS branch_name,
-SIGN(balance) AS balance_sign,
+REPLACE(TRUNCATE(salary,0),'.','') AS salary_without_decimal,
+
+REVERSE(
+REPLACE(TRUNCATE(salary,0),'.','')
+) AS reversed_salary,
+
+DAYNAME(processed_date) AS weekday_name,
+INITCAP(emp_name) AS employee_name,
 
 CASE
-WHEN balance < 0 THEN 'Overdrawn'
-WHEN DATEDIFF(CURDATE(),last_transaction) > 365 THEN 'Dormant'
-ELSE 'Active'
-END AS account_status
+WHEN REPLACE(TRUNCATE(salary,0),'.','') =
+REVERSE(REPLACE(TRUNCATE(salary,0),'.',''))
+THEN 'Symmetric Pay'
 
-FROM bank_accounts;
+ELSE 'Asymmetric'
+END AS status
+
+FROM salary_symmetry;
+
+
+
+-- LEVEL 1 : QUESTION 16
+
+SELECT
+YEAR(credit_date) AS year_value,
+CEIL(salary) AS ceil_salary,
+DAYOFYEAR(credit_date) AS day_of_year,
+
+CASE
+WHEN (YEAR(credit_date)%4=0 
+AND YEAR(credit_date)%100<>0)
+OR YEAR(credit_date)%400=0
+THEN 'Leap Credit'
+
+ELSE 'Non-Leap Credit'
+END AS status
+
+FROM leap_salary;
+
+
+
+-- LEVEL 1 : QUESTION 17
+
+SELECT
+
+CASE
+WHEN MONTH(credit_date) >= 4
+THEN CONCAT(YEAR(credit_date),'-',YEAR(credit_date)+1)
+
+ELSE CONCAT(YEAR(credit_date)-1,'-',YEAR(credit_date))
+END AS fiscal_year,
+
+MONTHNAME(credit_date) AS month_name,
+FORMAT(salary,2) AS formatted_salary,
+LOWER(emp_name) AS employee_name,
+
+CASE
+WHEN MONTH(credit_date)=3
+THEN 'Year End Credit'
+
+WHEN MONTH(credit_date)=4
+THEN 'Year Start Credit'
+
+ELSE 'Mid Year'
+END AS status
+
+FROM fiscal_salary;
+
+
+
+-- LEVEL 1 : QUESTION 18
+
+SELECT
+RAND() AS random_value,
+ROUND(salary) AS rounded_salary,
+DAYNAME(record_date) AS day_name,
+LEFT(emp_name,1) AS first_character,
+
+CASE
+WHEN RAND() > 0.7
+THEN 'Sampled'
+
+ELSE 'Skipped'
+END AS status
+
+FROM salary_sampling;
+
+
+
+-- LEVEL 1 : QUESTION 19
+
+SELECT
+ASCII(LEFT(emp_name,1)) AS ascii_value,
+TIMESTAMPDIFF(YEAR,join_date,CURDATE()) AS years_since_joining,
+FLOOR(salary) AS floor_salary,
+
+CASE
+WHEN ASCII(LEFT(emp_name,1)) >
+TIMESTAMPDIFF(YEAR,join_date,CURDATE())
+THEN 'Name Dominates'
+
+ELSE 'Experience Dominates'
+END AS status
+
+FROM salary_ascii;
+
+
+
+-- LEVEL 1 : QUESTION 20
+
+SELECT
+DAY(credit_date) AS day_value,
+MONTH(credit_date) AS month_value,
+RIGHT(TRUNCATE(salary,0),2) AS last_two_salary_digits,
+UPPER(emp_name) AS employee_name,
+
+ABS(
+DAY(credit_date)-MONTH(credit_date)
+) AS day_month_difference,
+
+CASE
+WHEN DAY(credit_date)=MONTH(credit_date)
+
+OR RIGHT(TRUNCATE(salary,0),2)=
+LPAD(MONTH(credit_date),2,'0')
+
+THEN 'Calendar Match'
+
+ELSE 'Calendar Drift'
+END AS status
+
+FROM salary_calendar;
