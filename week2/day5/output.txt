@@ -1,0 +1,99 @@
+-- Q1 Output
+NULL
+NULL
+NULL
+
+-- Q2 Output
+123
+45
+9
+
+-- Q3 Output
+a
+t
+r
+
+-- Q4 Output
+z
+e
+t
+
+-- Q5 Output
+12
+45
+77
+
+-- Q6 Output
+1
+4
+9
+
+-- Q7 Output
+91
+1
+44
+
+-- Q8 Output
+123
+45
+9
+
+-- Q9 Output
+karthik
+rahul
+john
+
+-- Q10 Output
+gmail.com
+yahoo.com
+outlook.com
+
+-- Q11 Output
+gmail.com
+yahoo.com
+outlook.com
+
+-- Q12 Output
+com
+uk
+in
+
+-- Q13 Output
+abc
+test
+spark
+
+-- Q14 Output
+123
+45
+12
+
+-- Q15 Output
+EMP
+USR
+ORD
+
+-- Q16 Output
+91
+01
+44
+
+-- Q17 Output
+001
+002
+1001
+
+-- Q18 Output
+91
+01
+44
+
+-- Q19 Output
+IN
+US
+UK
+
+-- Q20 Output
+91
+1
+44
