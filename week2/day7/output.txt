@@ -1,0 +1,204 @@
+Q1 ROW_NUMBER() based on salary DESC
+
++----------+--------+---------+
+| emp_name | salary | row_num |
++----------+--------+---------+
+| Sneha    | 3000   | 1       |
+| Vikas    | 3000   | 2       |
+| Suresh   | 2800   | 3       |
+| Raj      | 2700   | 4       |
+| Rahul    | 2600   | 5       |
++----------+--------+---------+
+
+
+Q2 ROW_NUMBER() within department based on salary DESC
+
++----------+------------+--------+---------+
+| emp_name | department | salary | row_num |
++----------+------------+--------+---------+
+| Sneha    | Chennai    | 3000   | 1       |
+| Vikas    | Chennai    | 3000   | 2       |
+| Rahul    | Bangalore  | 2600   | 1       |
+| Deepak   | Bangalore  | 2500   | 2       |
+| Arjun    | Hyderabad  | 1800   | 1       |
++----------+------------+--------+---------+
+
+
+Q3 ROW_NUMBER() based on latest joining date
+
++----------+------------+---------+
+| emp_name | join_date  | row_num |
++----------+------------+---------+
+| Nisha    | 2023-01-20 | 1       |
+| Deepak   | 2023-01-19 | 2       |
+| Simran   | 2023-01-18 | 3       |
+| Raj      | 2023-01-17 | 4       |
+| Meena    | 2023-01-16 | 5       |
++----------+------------+---------+
+
+
+Q4 ROW_NUMBER() within department based on earliest joining date
+
++----------+------------+------------+---------+
+| emp_name | department | join_date  | row_num |
++----------+------------+------------+---------+
+| Amit     | Chennai    | 2023-01-01 | 1       |
+| Sneha    | Chennai    | 2023-01-03 | 2       |
+| Ravi     | Hyderabad  | 2023-01-02 | 1       |
+| Kiran    | Bangalore  | 2023-01-04 | 1       |
++----------+------------+------------+---------+
+
+
+Q5 ROW_NUMBER() based on salary ASC
+
++----------+--------+---------+
+| emp_name | salary | row_num |
++----------+--------+---------+
+| Ravi     | 1500   | 1       |
+| Pooja    | 1600   | 2       |
+| Anjali   | 1700   | 3       |
+| Arjun    | 1800   | 4       |
+| Karthik  | 1900   | 5       |
++----------+--------+---------+
+
+
+Q6 ROW_NUMBER() within department based on name ASC
+
++----------+------------+---------+
+| emp_name | department | row_num |
++----------+------------+---------+
+| Amit     | Chennai    | 1       |
+| Divya    | Chennai    | 2       |
+| Deepak   | Bangalore  | 1       |
+| Kiran    | Bangalore  | 2       |
+| Anjali   | Hyderabad  | 1       |
++----------+------------+---------+
+
+
+Q7 RANK() based on salary DESC
+
++----------+--------+----------+
+| emp_name | salary | rank_num |
++----------+--------+----------+
+| Sneha    | 3000   | 1        |
+| Vikas    | 3000   | 1        |
+| Suresh   | 2800   | 3        |
+| Raj      | 2700   | 4        |
+| Rahul    | 2600   | 5        |
++----------+--------+----------+
+
+
+Q8 RANK() within department based on salary DESC
+
++----------+------------+--------+----------+
+| emp_name | department | salary | rank_num |
++----------+------------+--------+----------+
+| Sneha    | Chennai    | 3000   | 1        |
+| Vikas    | Chennai    | 3000   | 1        |
+| Rahul    | Bangalore  | 2600   | 1        |
+| Deepak   | Bangalore  | 2500   | 2        |
+| Simran   | Hyderabad  | 2000   | 1        |
++----------+------------+--------+----------+
+
+
+Q9 RANK() based on latest joining date
+
++----------+------------+----------+
+| emp_name | join_date  | rank_num |
++----------+------------+----------+
+| Nisha    | 2023-01-20 | 1        |
+| Deepak   | 2023-01-19 | 2        |
+| Simran   | 2023-01-18 | 3        |
+| Raj      | 2023-01-17 | 4        |
+| Meena    | 2023-01-16 | 5        |
++----------+------------+----------+
+
+
+Q10 RANK() based on employee name ASC
+
++----------+----------+
+| emp_name | rank_num |
++----------+----------+
+| Amit     | 1        |
+| Anjali   | 2        |
+| Arjun    | 3        |
+| Deepak   | 4        |
+| Divya    | 5        |
++----------+----------+
+
+
+Q11 RANK() within department based on salary ASC
+
++----------+------------+--------+----------+
+| emp_name | department | salary | rank_num |
++----------+------------+--------+----------+
+| Ravi     | Hyderabad  | 1500   | 1        |
+| Pooja    | Hyderabad  | 1600   | 2        |
+| Kiran    | Bangalore  | 2500   | 1        |
+| Rahul    | Bangalore  | 2600   | 2        |
+| Amit     | Chennai    | 2000   | 1        |
++----------+------------+--------+----------+
+
+
+Q12 DENSE_RANK() based on salary DESC
+
++----------+--------+----------------+
+| emp_name | salary | dense_rank_num |
++----------+--------+----------------+
+| Sneha    | 3000   | 1              |
+| Vikas    | 3000   | 1              |
+| Suresh   | 2800   | 2              |
+| Raj      | 2700   | 3              |
+| Rahul    | 2600   | 4              |
++----------+--------+----------------+
+
+
+Q13 DENSE_RANK() within department based on salary DESC
+
++----------+------------+--------+----------------+
+| emp_name | department | salary | dense_rank_num |
++----------+------------+--------+----------------+
+| Sneha    | Chennai    | 3000   | 1              |
+| Vikas    | Chennai    | 3000   | 1              |
+| Rahul    | Bangalore  | 2600   | 1              |
+| Deepak   | Bangalore  | 2500   | 2              |
+| Simran   | Hyderabad  | 2000   | 1              |
++----------+------------+--------+----------------+
+
+
+Q14 DENSE_RANK() based on joining date DESC
+
++----------+------------+----------------+
+| emp_name | join_date  | dense_rank_num |
++----------+------------+----------------+
+| Nisha    | 2023-01-20 | 1              |
+| Deepak   | 2023-01-19 | 2              |
+| Simran   | 2023-01-18 | 3              |
+| Raj      | 2023-01-17 | 4              |
+| Meena    | 2023-01-16 | 5              |
++----------+------------+----------------+
+
+
+Q15 DENSE_RANK() based on salary ASC
+
++----------+--------+----------------+
+| emp_name | salary | dense_rank_num |
++----------+--------+----------------+
+| Ravi     | 1500   | 1              |
+| Pooja    | 1600   | 2              |
+| Anjali   | 1700   | 3              |
+| Arjun    | 1800   | 4              |
+| Karthik  | 1900   | 5              |
++----------+--------+----------------+
+
+
+Q16 DENSE_RANK() within department based on join date ASC
+
++----------+------------+------------+----------------+
+| emp_name | department | join_date  | dense_rank_num |
++----------+------------+------------+----------------+
+| Amit     | Chennai    | 2023-01-01 | 1              |
+| Sneha    | Chennai    | 2023-01-03 | 2              |
+| Ravi     | Hyderabad  | 2023-01-02 | 1              |
+| Kiran    | Bangalore  | 2023-01-04 | 1              |
++----------+------------+------------+----------------+
