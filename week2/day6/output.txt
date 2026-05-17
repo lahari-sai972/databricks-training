@@ -1,0 +1,242 @@
+Q1 Show all employees whose salary is NULL
+
+2 John NULL 5000 102
+4 David NULL NULL 103
+6 Kiran NULL NULL NULL
+8 Neha NULL 2000 NULL
+
+
+Q2 Show all orders where discount is NOT NULL
+
+102 John NULL 50 NULL
+105 Priya 1500 100 NULL
+108 Neha NULL 200 DISC15
+
+
+Q3 Get products where category is NULL
+
+3 Tablet 30000 NULL 5
+4 Headphones NULL NULL NULL
+7 Mouse 500 NULL NULL
+
+
+Q4 Count number of employees with NULL manager_id
+
+3
+
+
+Q5 Replace NULL salary with 0
+
+1 Amit 50000
+2 John 0
+3 Sara 60000
+4 David 0
+5 Priya 45000
+6 Kiran 0
+7 Ravi 70000
+8 Neha 0
+
+
+Q6 Replace NULL bonus with 1000
+
+1 Amit 1000
+2 John 5000
+3 Sara 1000
+4 David 1000
+5 Priya 3000
+6 Kiran 1000
+7 Ravi 7000
+8 Neha 2000
+
+
+Q7 Show order amount, if NULL replace with 500
+
+101 Amit 1000
+102 John 500
+103 Sara 2000
+104 David 500
+105 Priya 1500
+106 Kiran 500
+107 Ravi 3000
+108 Neha 500
+
+
+Q8 Replace NULL stock with 0
+
+1 Laptop 10
+2 Phone 0
+3 Tablet 5
+4 Headphones 0
+5 Monitor 0
+6 Keyboard 15
+7 Mouse 0
+8 Printer 3
+
+
+Q9 Show employee earnings using salary, if NULL use bonus
+
+1 Amit 50000
+2 John 5000
+3 Sara 60000
+4 David NULL
+5 Priya 45000
+6 Kiran NULL
+7 Ravi 70000
+8 Neha 2000
+
+
+Q10 Show first available value salary → bonus → 0
+
+1 Amit 50000
+2 John 5000
+3 Sara 60000
+4 David 0
+5 Priya 45000
+6 Kiran 0
+7 Ravi 70000
+8 Neha 2000
+
+
+Q11 Show product price price → 1000
+
+1 Laptop 50000
+2 Phone 1000
+3 Tablet 30000
+4 Headphones 1000
+5 Monitor 20000
+6 Keyboard 1000
+7 Mouse 500
+8 Printer 1000
+
+
+Q12 Get customer payment amount → discount → 0
+
+101 Amit 1000
+102 John 50
+103 Sara 2000
+104 David 0
+105 Priya 1500
+106 Kiran 0
+107 Ravi 3000
+108 Neha 200
+
+
+Q13 Convert salary to NULL if salary = 0
+
+1 Amit 50000
+2 John NULL
+3 Sara 60000
+4 David NULL
+5 Priya 45000
+6 Kiran NULL
+7 Ravi 70000
+8 Neha NULL
+
+
+Q14 Convert discount to NULL if discount = 0
+
+101 NULL
+102 50
+103 NULL
+104 NULL
+105 100
+106 NULL
+107 NULL
+108 200
+
+
+Q15 Avoid divide by zero
+
+101 NULL
+102 NULL
+103 NULL
+104 NULL
+105 15
+106 NULL
+107 NULL
+108 NULL
+
+
+Q16 Replace coupon_code with NULL if it is 'DISC10'
+
+101 NULL
+102 NULL
+103 DISC20
+104 NULL
+105 NULL
+106 DISC5
+107 NULL
+108 DISC15
+
+
+Q17 Calculate total earnings salary + bonus
+
+1 Amit 50000
+2 John 5000
+3 Sara 60000
+4 David 0
+5 Priya 48000
+6 Kiran 0
+7 Ravi 77000
+8 Neha 2000
+
+
+Q18 Show employees where both salary AND bonus are NULL
+
+4 David NULL NULL 103
+6 Kiran NULL NULL NULL
+
+
+Q19 Show products where price is NULL but category is NOT NULL
+
+2 Phone NULL Electronics NULL
+6 Keyboard NULL Accessories 15
+8 Printer NULL Electronics 3
+
+
+Q20 Show orders where both amount and discount are NULL
+
+104 David NULL NULL NULL
+106 Kiran NULL NULL DISC5
+
+
+Q21 Show employee income using COALESCE
+
+1 Amit 50000
+2 John 5000
+3 Sara 60000
+4 David 1000
+5 Priya 45000
+6 Kiran 1000
+7 Ravi 70000
+8 Neha 2000
+
+
+Q22 Replace empty discount with NULL using NULLIF
+
+101 NULL
+102 50
+103 NULL
+104 NULL
+105 100
+106 NULL
+107 NULL
+108 200
+
+
+Q23 Show final payable amount amount - discount
+
+101 Amit 1000
+102 John -50
+103 Sara 2000
+104 David 0
+105 Priya 1400
+106 Kiran 0
+107 Ravi 3000
+108 Neha -200
+
+
+Q24 Find employees where salary is NULL but manager exists
+
+2 John NULL 5000 102
+4 David NULL NULL 103
