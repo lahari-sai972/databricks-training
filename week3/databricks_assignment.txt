@@ -1,0 +1,739 @@
+# E-Commerce Orders Analysis Using PySpark – Answers
+
+## 1. Display only order_id, product and price
+
+```python
+orders_df.select("order_id","product","price").show()
+```
+
+## 2. Rename product to product_name
+
+```python
+orders_df.withColumnRenamed("product","product_name").show()
+```
+
+## 3. Add total_amount = price * quantity
+
+```python
+orders_df = orders_df.withColumn(
+    "total_amount",
+    col("price") * col("quantity")
+)
+```
+
+## 4. Create discount column
+
+```python
+orders_df.withColumn(
+    "discount",
+    when(col("category")=="Electronics",10)
+    .when(col("category")=="Fashion",5)
+    .when(col("category")=="Appliances",8)
+).show()
+```
+
+## 5. Convert order_date into DateType
+
+```python
+orders_df = orders_df.withColumn(
+    "order_date",
+    to_date("order_date","yyyy-MM-dd")
+)
+```
+
+## 6. Display all orders placed from Hyderabad
+
+```python
+orders_df.filter(col("city")=="Hyderabad").show()
+```
+
+## 7. Find orders where quantity > 2
+
+```python
+orders_df.filter(col("quantity") > 2).show()
+```
+
+## 8. Display only Electronics products
+
+```python
+orders_df.filter(col("category")=="Electronics").show()
+```
+
+## 9. Create category_upper
+
+```python
+orders_df.withColumn(
+    "category_upper",
+    upper(col("category"))
+).show()
+```
+
+## 10. Remove city column
+
+```python
+orders_df.drop("city").show()
+```
+
+---
+
+## 11. Find orders with amount greater than 40,000
+
+```python
+orders_df.filter(col("total_amount") > 40000).show()
+```
+
+## 12. Find orders placed between Jan 15 and Jan 22
+
+```python
+orders_df.filter(
+    (col("order_date") >= "2025-01-15") &
+    (col("order_date") <= "2025-01-22")
+).show()
+```
+
+## 13. Find customers whose age is above 30
+
+```python
+customers_df.filter(col("age") > 30).show()
+```
+
+## 14. Find products that start with letter M
+
+```python
+orders_df.filter(col("product").startswith("M")).show()
+```
+
+## 15. Find orders from Hyderabad and Bangalore
+
+```python
+orders_df.filter(
+    col("city").isin("Hyderabad","Bangalore")
+).show()
+```
+
+---
+
+## 16. Find total sales amount
+
+```python
+orders_df.agg(
+    sum("total_amount").alias("total_sales")
+).show()
+```
+
+## 17. Find total quantity sold per category
+
+```python
+orders_df.groupBy("category") \
+    .agg(sum("quantity").alias("total_qty")) \
+    .show()
+```
+
+## 18. Find average product price by category
+
+```python
+orders_df.groupBy("category") \
+    .agg(avg("price").alias("avg_price")) \
+    .show()
+```
+
+## 19. Find maximum priced product
+
+```python
+orders_df.orderBy(desc("price")).show(1)
+```
+
+## 20. Find minimum priced product
+
+```python
+orders_df.orderBy(asc("price")).show(1)
+```
+
+## 21. Find total orders by city
+
+```python
+orders_df.groupBy("city") \
+    .count() \
+    .show()
+```
+
+## 22. Find category generating highest revenue
+
+```python
+orders_df.groupBy("category") \
+    .agg(sum("total_amount").alias("revenue")) \
+    .orderBy(desc("revenue")) \
+    .show(1)
+```
+
+---
+
+## 23. Count products sold per category
+
+```python
+orders_df.groupBy("category") \
+    .count() \
+    .show()
+```
+
+## 24. Find average quantity per city
+
+```python
+orders_df.groupBy("city") \
+    .agg(avg("quantity").alias("avg_qty")) \
+    .show()
+```
+
+## 25. Find total revenue per city
+
+```python
+orders_df.groupBy("city") \
+    .agg(sum("total_amount").alias("revenue")) \
+    .show()
+```
+
+## 26. Find total revenue per customer
+
+```python
+orders_df.groupBy("customer_id") \
+    .agg(sum("total_amount").alias("revenue")) \
+    .show()
+```
+
+## 27. Find top 3 customers by revenue
+
+```python
+orders_df.groupBy("customer_id") \
+    .agg(sum("total_amount").alias("revenue")) \
+    .orderBy(desc("revenue")) \
+    .show(3)
+```
+
+## 28. Find city with highest sales
+
+```python
+orders_df.groupBy("city") \
+    .agg(sum("total_amount").alias("sales")) \
+    .orderBy(desc("sales")) \
+    .show(1)
+```
+
+---
+
+## 29. Join orders and customers
+
+```python
+joined_df = orders_df.join(
+    customers_df,
+    "customer_id"
+)
+```
+
+## 30. Display customer_name and product purchased
+
+```python
+joined_df.select(
+    "customer_name",
+    "product"
+).show()
+```
+
+## 31. Find total spending by each customer
+
+```python
+joined_df.groupBy("customer_name") \
+    .agg(sum("total_amount").alias("spending")) \
+    .show()
+```
+
+## 32. Find customer who spent maximum amount
+
+```python
+joined_df.groupBy("customer_name") \
+    .agg(sum("total_amount").alias("spending")) \
+    .orderBy(desc("spending")) \
+    .show(1)
+```
+
+## 33. Find average spending by city
+
+```python
+joined_df.groupBy("city") \
+    .agg(avg("total_amount").alias("avg_spending")) \
+    .show()
+```
+
+## 34. Find customers who purchased Electronics
+
+```python
+joined_df.filter(
+    col("category")=="Electronics"
+).select("customer_name").distinct().show()
+```
+
+---
+
+## 35. Sort products by price descending
+
+```python
+orders_df.orderBy(desc("price")).show()
+```
+
+## 36. Display distinct categories
+
+```python
+orders_df.select("category").distinct().show()
+```
+
+## 37. Display distinct cities
+
+```python
+orders_df.select("city").distinct().show()
+```
+
+## 38. Display top 5 expensive orders
+
+```python
+orders_df.orderBy(desc("price")).show(5)
+```
+
+---
+
+## 39. Assign row_number based on revenue descending
+
+```python
+windowSpec = Window.orderBy(desc("total_amount"))
+
+orders_df.withColumn(
+    "row_num",
+    row_number().over(windowSpec)
+).show()
+```
+
+## 40. Assign rank by category based on price
+
+```python
+windowSpec = Window.partitionBy("category") \
+                   .orderBy(desc("price"))
+
+orders_df.withColumn(
+    "rank",
+    rank().over(windowSpec)
+).show()
+```
+
+## 41. Assign dense_rank by category
+
+```python
+orders_df.withColumn(
+    "dense_rank",
+    dense_rank().over(windowSpec)
+).show()
+```
+
+## 42. Highest priced product in each category
+
+```python
+orders_df.withColumn(
+    "rank",
+    rank().over(windowSpec)
+).filter(col("rank")==1).show()
+```
+
+## 43. Second highest priced product in each category
+
+```python
+orders_df.withColumn(
+    "rank",
+    rank().over(windowSpec)
+).filter(col("rank")==2).show()
+```
+
+## 44. Calculate running revenue per city
+
+```python
+windowSpec = Window.partitionBy("city") \
+                   .orderBy("order_date")
+
+orders_df.withColumn(
+    "running_revenue",
+    sum("total_amount").over(windowSpec)
+).show()
+```
+
+## 45. Calculate cumulative quantity sold
+
+```python
+windowSpec = Window.orderBy("order_date")
+
+orders_df.withColumn(
+    "cumulative_qty",
+    sum("quantity").over(windowSpec)
+).show()
+```
+# Section 8: Advanced Transformations (46–55)
+
+## 46. Classify Orders
+
+```python
+orders_df.withColumn(
+    "value_category",
+    when(col("total_amount") > 50000, "High Value")
+    .when(
+        (col("total_amount") >= 20000) &
+        (col("total_amount") <= 50000),
+        "Medium Value"
+    )
+    .otherwise("Low Value")
+).show()
+```
+
+## 47. Find Duplicate Products
+
+```python
+orders_df.groupBy("product") \
+    .count() \
+    .filter(col("count") > 1) \
+    .show()
+```
+
+## 48. Remove Duplicate Products
+
+```python
+orders_df.dropDuplicates(["product"]).show()
+```
+
+## 49. Pivot Category-wise Sales by City
+
+```python
+pivot_df = orders_df.groupBy("city") \
+    .pivot("category") \
+    .agg(sum("total_amount"))
+
+pivot_df.show()
+```
+
+## 50. Unpivot Pivoted Data
+
+```python
+from pyspark.sql.functions import expr
+
+pivot_df.selectExpr(
+    "city",
+    "stack(3,'Electronics',Electronics,'Fashion',Fashion,'Appliances',Appliances) as (category,revenue)"
+).show()
+```
+
+## 51. Create Array Column
+
+```python
+orders_df.withColumn(
+    "product_category",
+    array("product","category")
+).show()
+```
+
+## 52. Explode Array Column
+
+```python
+orders_df.withColumn(
+    "product_category",
+    array("product","category")
+).select(
+    "order_id",
+    explode("product_category")
+).show()
+```
+
+## 53. Create Map Column
+
+```python
+orders_df.withColumn(
+    "product_map",
+    create_map(
+        lit("product"), col("product"),
+        lit("category"), col("category")
+    )
+).show(truncate=False)
+```
+
+## 54. Convert DataFrame to RDD and Count Records
+
+```python
+orders_rdd = orders_df.rdd
+
+orders_rdd.count()
+```
+
+## 55. Convert RDD Back to DataFrame
+
+```python
+new_df = spark.createDataFrame(
+    orders_rdd,
+    orders_df.schema
+)
+
+new_df.show()
+```
+
+---
+
+# Section 9: Real-Time Data Engineer Scenarios (56–65)
+
+## 56. Customers Purchasing from Multiple Categories
+
+```python
+orders_df.groupBy("customer_id") \
+    .agg(
+        countDistinct("category")
+        .alias("category_count")
+    ) \
+    .filter(col("category_count") > 1) \
+    .show()
+```
+
+## 57. Customers Who Bought Both Mobile and Laptop
+
+```python
+mobile_customers = orders_df.filter(
+    col("product")=="Mobile"
+).select("customer_id")
+
+laptop_customers = orders_df.filter(
+    col("product")=="Laptop"
+).select("customer_id")
+
+mobile_customers.intersect(
+    laptop_customers
+).show()
+```
+
+## 58. Find Repeat Customers
+
+```python
+orders_df.groupBy("customer_id") \
+    .count() \
+    .filter(col("count") > 1) \
+    .show()
+```
+
+## 59. Category Contribution Percentage
+
+```python
+total_revenue = orders_df.agg(
+    sum("total_amount")
+).collect()[0][0]
+
+orders_df.groupBy("category") \
+    .agg(
+        sum("total_amount")
+        .alias("revenue")
+    ) \
+    .withColumn(
+        "percentage",
+        round(
+            col("revenue") * 100 / total_revenue,
+            2
+        )
+    ).show()
+```
+
+## 60. Monthly Sales Trend
+
+```python
+orders_df.groupBy(
+    month("order_date")
+    .alias("month")
+).agg(
+    sum("total_amount")
+    .alias("sales")
+).show()
+```
+
+## 61. Top-Selling Product
+
+```python
+orders_df.groupBy("product") \
+    .agg(
+        sum("quantity")
+        .alias("qty")
+    ) \
+    .orderBy(desc("qty")) \
+    .show(1)
+```
+
+## 62. Bottom-Selling Product
+
+```python
+orders_df.groupBy("product") \
+    .agg(
+        sum("quantity")
+        .alias("qty")
+    ) \
+    .orderBy("qty") \
+    .show(1)
+```
+
+## 63. Customer Retention Percentage
+
+```python
+total_customers = customers_df.count()
+
+repeat_customers = orders_df.groupBy(
+    "customer_id"
+).count().filter(
+    col("count") > 1
+).count()
+
+retention = (
+    repeat_customers * 100
+) / total_customers
+
+print(retention)
+```
+
+## 64. City-wise Revenue Contribution
+
+```python
+total_revenue = orders_df.agg(
+    sum("total_amount")
+).collect()[0][0]
+
+orders_df.groupBy("city") \
+    .agg(
+        sum("total_amount")
+        .alias("revenue")
+    ) \
+    .withColumn(
+        "contribution",
+        round(
+            col("revenue") * 100 /
+            total_revenue,
+            2
+        )
+    ).show()
+```
+
+## 65. Customer Segmentation Report
+
+```python
+customer_revenue = orders_df.groupBy(
+    "customer_id"
+).agg(
+    sum("total_amount")
+    .alias("revenue")
+)
+
+customer_revenue.withColumn(
+    "segment",
+    when(
+        col("revenue") > 100000,
+        "Premium"
+    )
+    .when(
+        col("revenue") > 50000,
+        "Gold"
+    )
+    .otherwise("Silver")
+).show()
+```
+
+---
+
+# Interview Questions (66–75)
+
+## 66. select() vs withColumn()
+
+* select() → Select required columns.
+* withColumn() → Add or modify columns.
+
+## 67. distinct() vs dropDuplicates()
+
+* distinct() removes complete duplicate rows.
+* dropDuplicates() removes duplicates based on selected columns.
+
+## 68. groupBy() vs Window Functions
+
+* groupBy() reduces rows.
+* Window Functions retain rows and perform calculations across partitions.
+
+## 69. When Would You Use Broadcast Join?
+
+Use when one table is very small and another table is very large.
+
+```python
+orders_df.join(
+    broadcast(customers_df),
+    "customer_id"
+)
+```
+
+## 70. repartition() vs coalesce()
+
+### repartition()
+
+* Increase or decrease partitions
+* Causes shuffle
+
+### coalesce()
+
+* Mostly decrease partitions
+* Minimal shuffle
+
+## 71. What Causes Data Skew?
+
+* Uneven data distribution
+* One partition receives most of the records
+* Leads to slow Spark jobs
+
+## 72. How Would You Optimize a Large Join?
+
+* Broadcast Join
+* Partition on join keys
+* Filter data before join
+* Use Delta Tables
+* Remove unnecessary columns
+
+## 73. How Do You Handle Small Files Problem?
+
+```python
+df.coalesce(1)
+```
+
+Databricks:
+
+```sql
+OPTIMIZE sales_table;
+```
+
+## 74. Narrow vs Wide Transformations
+
+### Narrow
+
+* filter()
+* select()
+* withColumn()
+
+### Wide
+
+* groupBy()
+* join()
+* distinct()
+* repartition()
+
+## 75. How Does Catalyst Optimizer Improve Performance?
+
+Catalyst Optimizer:
+
+* Predicate Pushdown
+* Constant Folding
+* Projection Pruning
+* Join Optimization
+* Query Rewriting
+
+Benefits:
+
+* Faster execution
+* Better resource utilization
+* Reduced memory usage
+* Optimized query plans
